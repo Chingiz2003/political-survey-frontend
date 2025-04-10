@@ -21,13 +21,13 @@ const Dashboard = () => {
         Authorization: `Bearer ${token}`
       }
     })
-    .then(res => {
-      setIin(res.data.iin);
-    })
-    .catch(err => {
-      console.error("Ошибка получения профиля:", err);
-      navigate("/"); // Если токен невалидный — возвращаем на вход
-    });
+      .then(res => {
+        setIin(res.data.iin);
+      })
+      .catch(err => {
+        console.error("Ошибка получения профиля:", err);
+        navigate("/"); // Если токен невалидный — возвращаем на вход
+      });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -47,50 +47,49 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Добро пожаловать!</h1>
-      <p>Вы успешно вошли с ИИН: {iin ? iin : "Загрузка..."}</p>
+      <div style={{ textAlign: "center" }}>
+        <h1>Добро пожаловать!</h1>
+        <p>Вы успешно вошли с ИИН: {iin ? iin : "Загрузка..."}</p>
+        <button
+          onClick={goToPolls}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            fontSize: "16px",
+            cursor: "pointer",
+          }}
+        >
+          Перейти к опросам
+        </button>
 
-      <button
-        onClick={goToPolls}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Перейти к опросам
-      </button>
+        <button
+          onClick={goToCitizenProfile}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            fontSize: "16px",
+            cursor: "pointer",
+          }}
+        >
+          Перейти к профилю
+        </button>
 
-      <button
-        onClick={goToCitizenProfile}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Перейти к профилю
-      </button>
-
-      <button
-        onClick={handleLogout}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "#f44336",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer"
-        }}
-      >
-        Выйти
-      </button>
-    </div>
+        <button
+          onClick={handleLogout}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            fontSize: "16px",
+            backgroundColor: "#f44336",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer"
+          }}
+        >
+          Выйти
+        </button>
+      </div>
   );
 };
 

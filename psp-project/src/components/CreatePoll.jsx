@@ -12,16 +12,22 @@ const CreatePoll = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (!title.trim() || !description.trim()) {
+      setSuccess("Название и описание обязательны");
+      return;
+    }
+  
     try {
-      const res = await axios.post("http://localhost:8080/api/admin/polls", {
+      const res = await axios.post("http://localhost:8080/api/admin/polls/create", {
         title,
         description,
         anonymous,
         status
       }, {
-        withCredentials: true
+        withCredentials: true  // Это важно для отправки cookie сессии
       });
-
+  
+      console.log("Ответ сервера:", res.data);
       setSuccess("Опрос успешно создан!");
       setTitle("");
       setDescription("");
@@ -30,8 +36,13 @@ const CreatePoll = () => {
     } catch (err) {
       console.error("Ошибка создания опроса:", err);
       setSuccess("Ошибка создания опроса");
+      
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        navigate("/admin/login");
+      }
     }
-  };
+};
+  
 
   return (
     <div style={{ padding: "30px", maxWidth: "600px", margin: "0 auto" }}>

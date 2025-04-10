@@ -10,22 +10,23 @@ const AdminLogin = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/login", new URLSearchParams({
+      await axios.post("http://localhost:8080/login", new URLSearchParams({
         username,
         password
       }), {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        withCredentials: true
+        withCredentials: true  // Важно для сохранения сессии
       });
-
-      // Spring Security сохранит сессию в cookie
+      
       localStorage.setItem("isAdmin", "true");
       navigate("/admin/create-poll");
     } catch (err) {
       console.error("Ошибка входа:", err);
-      setError("Неверный логин или пароль");
+      console.error("Статус:", err.response?.status);
+      console.error("Данные:", err.response?.data);
+      setError("Неверный логин или пароль: " + (err.response?.data || err.message));
     }
   };
 
