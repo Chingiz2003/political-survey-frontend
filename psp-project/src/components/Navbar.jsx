@@ -12,7 +12,7 @@ const Navbar = () => {
             <Link className="nav-link" to="/dashboard">Панель</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/polls">Опросы</Link>
+            <Link className="nav-link" to="/polls1">Опросы</Link>
           </li>
         </ul>
       </div>

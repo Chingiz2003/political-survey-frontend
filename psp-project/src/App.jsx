@@ -12,6 +12,9 @@ import CitizenProfile from "./components/CitizenProfile"
 import AdminLogin from "./components/AdminLogin";
 import CreatePoll from "./components/CreatePoll";
 import CreateQuestion from './components/CreateQuestion'
+import CreateAnswerOption from './components/CreateAnswerOptions'
+import AnswerOptionsList from './components/AnswerOptionsList'
+import PublicPollList from './components/PublicPollList'
 
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/create-poll" element={<CreatePoll />} />
           <Route path="/admin/create-question" element={<CreateQuestion />} />
+          <Route path="/admin/create-answer" element={<CreateAnswerOption />} />
+          <Route path="/admin/answers-list" element={<AnswerOptionsList />} />
+          <Route path="/polls1" element={<PublicPollList />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -29,7 +29,7 @@ const CreateQuestion = () => {
     try {
       const res = await axios.post(
         `http://localhost:8080/api/admin/questions/create?pollId=${selectedPollId}`,
-        { text, type },
+        { text, questionType: type},
         { withCredentials: true }
       );
 
