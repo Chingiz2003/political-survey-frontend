@@ -1,15 +1,45 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const PublicPollList = () => {
   const [polls, setPolls] = useState([]);
   const [error, setError] = useState("");
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [textAnswers, setTextAnswers] = useState({});
+
+  const citizenToken = localStorage.getItem("token");
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/polls/public")
+    axios.get("http://localhost:8080/api/polls/public", {
+      headers: { Authorization: `Bearer ${citizenToken}` }
+    })
       .then(res => setPolls(res.data))
       .catch(() => setError("Не удалось загрузить опросы"));
   }, []);
+
+  const handleVote = async (questionId, questionType) => {
+    const answerId = selectedAnswers[questionId];
+    const openAnswer = textAnswers[questionId];
+
+    try {
+      await axios.post("http://localhost:8080/api/votes", {
+        questionId,
+        answerId: questionType === "TEXT" ? null : answerId,
+        openAnswer: questionType === "TEXT" ? openAnswer : null,
+      }, {
+        headers: {
+          Authorization: `Bearer ${citizenToken}`
+        },
+        withCredentials: true
+      });
+
+      alert("Голос засчитан!");
+    } catch (err) {
+      console.error("Ошибка при голосовании:", err);
+      alert("Ошибка при голосовании");
+    }
+  };
 
   return (
     <div style={{ padding: "30px", maxWidth: "800px", margin: "0 auto" }}>
@@ -29,11 +59,38 @@ const PublicPollList = () => {
             {poll.questions.map(q => (
               <div key={q.id} style={{ marginTop: "10px" }}>
                 <p><strong>Вопрос:</strong> {q.text}</p>
-                <ul>
-                  {q.options.map(opt => (
-                    <li key={opt.id}>{opt.orderIndex}. {opt.text}</li>
-                  ))}
-                </ul>
+                <Link to={`/poll/${poll.id}`}>
+                  <button>Перейти к голосованию</button>
+                </Link>
+
+                {q.questionType === "TEXT" ? (
+                  <textarea
+                    placeholder="Введите свой ответ"
+                    value={textAnswers[q.id] || ""}
+                    onChange={e => setTextAnswers({ ...textAnswers, [q.id]: e.target.value })}
+                    rows={3}
+                    style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+                  />
+                ) : (
+                  q.options.map(opt => (
+                    <div key={opt.id}>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`question-${q.id}`}
+                          value={opt.id}
+                          checked={selectedAnswers[q.id] === opt.id}
+                          onChange={() => setSelectedAnswers({ ...selectedAnswers, [q.id]: opt.id })}
+                        />
+                        {opt.orderIndex}. {opt.text}
+                      </label>
+                    </div>
+                  ))
+                )}
+
+                <button onClick={() => handleVote(q.id, q.questionType)} style={{ marginTop: "10px" }}>
+                  Проголосовать
+                </button>
               </div>
             ))}
           </div>
