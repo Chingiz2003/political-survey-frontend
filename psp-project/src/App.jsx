@@ -19,6 +19,8 @@ import PublicPollList from './components/PublicPollList'
 import VoteForm from './components/VoteForm'
 import PollList from './components/Polls'
 import LandingPage from './components/main/LandingPage'
+import PollResults from './components/PollResults'
+import AdminPollList from './components/AdminPollList'
 
 
 function App() {
@@ -32,7 +34,6 @@ function App() {
           <Route path='/login' element={<FaceAuth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/me" element={<CitizenProfile />} />
-          {/* <Route path="/polls" element={<Polls />} /> */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/create-poll" element={<CreatePoll />} />
           <Route path="/admin/create-question" element={<CreateQuestion />} />
@@ -40,8 +41,11 @@ function App() {
           <Route path="/admin/answers-list" element={<AnswerOptionsList />} />
           <Route path="/polls1" element={<PublicPollList />} />
           <Route path="/all_polls" element={<PollList />} />
-          {/* <Route path="/poll/:pollId" element={<VotePage />} /> */}
           <Route path="/poll/:pollId" element={<VoteForm />} />
+          <Route path="/results/:pollId" element={<PollResults />} />
+          <Route path="/admin/polls" element={<AdminPollList />} />
+          {/* <Route path="/polls" element={<Polls />} /> */}
+          {/* <Route path="/poll/:pollId" element={<VotePage />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

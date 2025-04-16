@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const PublicPollList = () => {
+  const navigate = useNavigate();
   const [polls, setPolls] = useState([]);
   const [error, setError] = useState("");
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -56,43 +59,15 @@ const PublicPollList = () => {
             <p><strong>Тип:</strong> {poll.anonymous ? "Анонимный" : "Именной"}</p>
             <p><strong>Статус:</strong> {poll.status}</p>
 
-            {poll.questions.map(q => (
-              <div key={q.id} style={{ marginTop: "10px" }}>
-                <p><strong>Вопрос:</strong> {q.text}</p>
-                <Link to={`/poll/${poll.id}`}>
-                  <button>Перейти к голосованию</button>
-                </Link>
-
-                {q.questionType === "TEXT" ? (
-                  <textarea
-                    placeholder="Введите свой ответ"
-                    value={textAnswers[q.id] || ""}
-                    onChange={e => setTextAnswers({ ...textAnswers, [q.id]: e.target.value })}
-                    rows={3}
-                    style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-                  />
-                ) : (
-                  q.options.map(opt => (
-                    <div key={opt.id}>
-                      <label>
-                        <input
-                          type="radio"
-                          name={`question-${q.id}`}
-                          value={opt.id}
-                          checked={selectedAnswers[q.id] === opt.id}
-                          onChange={() => setSelectedAnswers({ ...selectedAnswers, [q.id]: opt.id })}
-                        />
-                        {opt.orderIndex}. {opt.text}
-                      </label>
-                    </div>
-                  ))
-                )}
-
-                <button onClick={() => handleVote(q.id, q.questionType)} style={{ marginTop: "10px" }}>
-                  Проголосовать
-                </button>
-              </div>
-            ))}
+            {poll.status === "CLOSED" ? (
+              <button onClick={() => navigate(`/results/${poll.id}`)}>
+                Результаты опроса
+              </button>
+            ) : (
+              <button onClick={() => navigate(`/poll/${poll.id}`)}>
+                Проголосовать
+              </button>
+            )}
           </div>
         ))
       )}
